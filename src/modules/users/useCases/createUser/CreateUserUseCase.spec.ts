@@ -27,14 +27,18 @@ describe('CreateUser', () => {
   });
 
   it('should not be able to create a duplicated user', async () => {
-    const user = {
+    await createUserUseCase.execute({
       name: 'Test user',
       email: 'test@email.com',
       password: '123456',
-    };
+    });
 
-    await createUserUseCase.execute(user);
-
-    await expect(createUserUseCase.execute(user)).rejects.toBeInstanceOf(CreateUserError);
+    await expect(
+      createUserUseCase.execute({
+        name: 'Test user',
+        email: 'test@email.com',
+        password: '123456',
+      })
+    ).rejects.toBeInstanceOf(CreateUserError);
   });
 });
