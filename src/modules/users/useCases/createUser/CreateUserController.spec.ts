@@ -29,7 +29,7 @@ describe('CreateUserController', () => {
     await mainConnection.close();
   });
 
-  it('should be able to insert a new user', async () => {
+  it('should be able to create a new user', async () => {
     const response = await request(app).post('/api/v1/users').send({
       name: 'Test user',
       email: 'test@email.com',
@@ -37,5 +37,23 @@ describe('CreateUserController', () => {
     });
 
     expect(response.status).toBe(201);
+  });
+
+  it('should not be able to create a duplicated user', async () => {
+    const firstResponse = await request(app).post('/api/v1/users').send({
+      name: 'Test user',
+      email: 'test@email.com',
+      password: '123456',
+    });
+
+    expect(firstResponse.status).toBe(201);
+
+    const secondResponse = await request(app).post('/api/v1/users').send({
+      name: 'Test user',
+      email: 'test@email.com',
+      password: '123456',
+    });
+
+    expect(secondResponse.status).toBe(400);
   });
 });
