@@ -12,7 +12,7 @@ describe('ShowUserProfile', () => {
     showUserProfileUseCase = new ShowUserProfileUseCase(inMemoryUsersRepository);
   });
 
-  it('should be able to create a new user', async () => {
+  it('should be able to show an user profile', async () => {
     const createdUser = await inMemoryUsersRepository.create({
       name: 'Test user',
       email: 'test@email.com',

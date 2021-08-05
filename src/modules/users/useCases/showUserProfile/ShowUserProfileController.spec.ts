@@ -29,7 +29,7 @@ describe('ShowUserProfileController', () => {
     await mainConnection.close();
   });
 
-  it('should be able to show a user profile', async () => {
+  it('should be able to show logged in user profile', async () => {
     await request(app).post('/api/v1/users').send({
       name: 'Test user',
       email: 'test@email.com',
