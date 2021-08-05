@@ -1,26 +1,23 @@
+import { hash } from "bcryptjs";
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
-import { CreateUserUseCase } from "../createUser/CreateUserUseCase";
 import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
 import { IncorrectEmailOrPasswordError } from "./IncorrectEmailOrPasswordError";
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
-let createUserUseCase: CreateUserUseCase;
 let inMemoryUsersRepository: InMemoryUsersRepository;
 
 describe('AuthenticateUser', () => {
   beforeEach(() => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
 
-    createUserUseCase = new CreateUserUseCase(inMemoryUsersRepository);
-
     authenticateUserUseCase = new AuthenticateUserUseCase(inMemoryUsersRepository);
   });
 
   it('should be able to authenticate user', async () => {
-    const user = await createUserUseCase.execute({
+    const user = await inMemoryUsersRepository.create({
       name: 'Test user',
       email: 'test@email.com',
-      password: '123456',
+      password: await hash('123456', 8),
     });
 
     const authenticatedUser = await authenticateUserUseCase.execute({
@@ -40,10 +37,10 @@ describe('AuthenticateUser', () => {
   });
 
   it('should not be able to authenticate user with wrong password', async () => {
-    const user = await createUserUseCase.execute({
+    const user = await inMemoryUsersRepository.create({
       name: 'Test user',
       email: 'test@email.com',
-      password: '123456',
+      password: await hash('123456', 8),
     });
 
     await expect(authenticateUserUseCase.execute({
