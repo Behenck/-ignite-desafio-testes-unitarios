@@ -27,11 +27,13 @@ describe('CreateUser', () => {
   });
 
   it('should not be able to create a duplicated user', async () => {
-    await createUserUseCase.execute({
+    const user = await createUserUseCase.execute({
       name: 'Test user',
       email: 'test@email.com',
       password: '123456',
     });
+
+    expect(user).toHaveProperty('id');
 
     await expect(
       createUserUseCase.execute({
